@@ -2,7 +2,7 @@
 Easy HTTP Response Header security fields checker.<br>
 
 ### Installation
-`git clone https://github.com/PierfrancescoConti/LiteRespH/.git`<br>
+`git clone https://github.com/PierfrancescoConti/LiteRespH.git`<br>
 
 ### Execution
 During a **Penetration Test**, to report issues about HTTP Resp-H security fields is required.<br>
