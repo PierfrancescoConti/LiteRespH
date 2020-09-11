@@ -11,4 +11,4 @@ Execute this and take an awesome evidence:<br><br>
 
 ### Screenshot
 
-![Screenshot](screenshot.png)
+![Screenshot](Screenshot.png)
