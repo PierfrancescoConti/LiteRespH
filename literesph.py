@@ -55,7 +55,7 @@ if len(sys.argv) != 2:
 	print("\nUsage:\n\t-> python3 literesph.py <url/IP>\n\t-> ./literesph.py <url/IP>\n")
 	exit(1)
 	
-bashCommand = "curl -I -i " + sys.argv[1]
+bashCommand = "curl -s -I -i " + sys.argv[1]
 process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 output,error = process.communicate()
 
