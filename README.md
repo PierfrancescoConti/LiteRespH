@@ -4,6 +4,10 @@ Easy HTTP Response Header security fields checker.<hr>
 ### Installation
 `git clone https://github.com/PierfrancescoConti/LiteRespH.git`<hr>
 
+### Requirements
+The script uses `curl` to request the site.
+<hr>
+
 ### Execution
 During a **Penetration Test**, to report issues about HTTP Resp-H security fields is required.<br>
 Execute this and take an awesome evidence:<br><br>
@@ -12,3 +16,6 @@ Execute this and take an awesome evidence:<br><br>
 ### Screenshot
 
 ![Screenshot](Screenshot.png)
+<hr>
+
+
