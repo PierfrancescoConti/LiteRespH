@@ -46,8 +46,35 @@ def check_h(output):
 		print("\t\033[33;1m<?>\033[0m Found \033[33;1m X-AspNet-Version \033[0m field")
 	if "X-AspNetMvc-Version".lower() in output.lower():
 		print("\t\033[33;1m<?>\033[0m Found \033[33;1m X-AspNetMvc-Version \033[0m field")
+	if "MicrosoftSharePointTeamServices".lower() in output.lower():
+		print("\t\033[33;1m<?>\033[0m Found \033[33;1m MicrosoftSharePointTeamServices \033[0m field")
 	print()
-	
+
+
+def chk_options(output):
+	print(" \033[37;1mAllowed HTTP methods (using OPTIONS):\033[32;1m")
+	ret="\033[33;1m-> \033[0m"
+	if "method not allowed" in output.lower():
+		print("\t\033[31;1m Method OPTIONS Not Allowed... \033[0m\n")
+	elif "allow" not in output.lower():
+		print("\t\033[31;1m Can't find allowed methods... \033[0m\n")
+	else:
+		out=output.split('\n')
+		for line in out:
+			if "allow" in line.lower():
+				l=line.split(" ")
+				for e in l:
+					if "allow" not in e.lower():
+						if "GET" in e.upper() or "POST" in e.upper():
+							ret+="\033[37;1m"+e+"\033[0m "
+						elif "TRACE" in e.upper() or "OPTIONS" in e.upper() or "PROPFIND" in e.upper() or "PROPPATCH" in e.upper() or "PUT" in e.upper() or "DELETE" in e.upper() or "MOVE" in e.upper() or "COPY" in e.upper():
+							ret+="\033[31;1m"+e+"\033[0m "
+						else:
+							ret+="\033[33;1m"+e+"\033[0m "
+						
+				print("\t"+ret+"\n")
+				return
+	return
 	
 		
 
@@ -55,24 +82,31 @@ if len(sys.argv) != 2:
 	print("\nUsage:\n\t-> python3 literesph.py <url/IP>\n\t-> ./literesph.py <url/IP>\n")
 	exit(1)
 	
-bashCommand = "curl -s -I -i " + sys.argv[1]
+
+
+bashCommand = "curl --connect-timeout 1 -s -I -i " + sys.argv[1]
 process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 output,error = process.communicate()
 
 output=output.decode("UTF-8").strip()
-
-output = clean_out(output)
-
-
-
-
-
-
-
-print("\n\033[34;1m#################### HEADER FIELDS #####################\033[0m\n")
-print("\t~~~ \033[37;1mRequest to \033[32;1m"+sys.argv[1]+"\033[0m ~~~\n")
-print(output)
-print("\033[34;1m########################################################\033[0m\n")
+if output=="":
+	print("\033[31;1m While performing HEAD: Connection problem... \033[0m")
+else:
+	output = clean_out(output)
+	print("\n\033[34;1m#################### HEADER FIELDS #####################\033[0m\n")
+	print("\t~~~ \033[37;1mRequest to \033[32;1m"+sys.argv[1]+"\033[0m ~~~\n")
+	print(output)
+	print("\033[34;1m########################################################\033[0m\n")
+	check_h(output)
 
 
-check_h(output)
+
+bashCommand = "curl  --connect-timeout 1 -s -I -i -X OPTIONS " + sys.argv[1]
+process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
+output,error = process.communicate()
+
+output = output.decode("UTF-8").strip()
+if output=="":
+	print("\033[31;1m While performing OPTIONS: Connection problem... \033[0m")
+else:
+	output = chk_options(output)
