@@ -38,9 +38,9 @@ def check_h(output):
 		print("\t\033[33;1m<?>\033[0m Found \033[33;1m Server \033[0m field")
 	if "X-Powered-By".lower() in output.lower():
 		print("\t\033[33;1m<?>\033[0m Found \033[33;1m X-Powered-By \033[0m field")
-	if "Powered-By".lower() in output.lower():
+	if "\nPowered-By".lower() in output.lower():
 		print("\t\033[33;1m<?>\033[0m Found \033[33;1m Powered-By \033[0m field")
-	if "X-AspNet".lower() in output.lower():
+	if "X-AspNet:".lower() in output.lower():
 		print("\t\033[33;1m<?>\033[0m Found \033[33;1m X-AspNet \033[0m field")
 	if "X-AspNet-Version".lower() in output.lower():
 		print("\t\033[33;1m<?>\033[0m Found \033[33;1m X-AspNet-Version \033[0m field")
@@ -54,7 +54,7 @@ def check_h(output):
 def chk_options(output):
 	print(" \033[37;1mAllowed HTTP methods (using OPTIONS):\033[32;1m")
 	ret="\033[33;1m-> \033[0m"
-	if "method not allowed" in output.lower():
+	if "not allowed" in output.lower():
 		print("\t\033[31;1m Method OPTIONS Not Allowed... \033[0m\n")
 	elif "allow" not in output.lower():
 		print("\t\033[31;1m Can't find allowed methods... \033[0m\n")
@@ -109,4 +109,4 @@ output = output.decode("UTF-8").strip()
 if output=="":
 	print("\033[31;1m While performing OPTIONS: Connection problem... \033[0m")
 else:
-	output = chk_options(output)
+	chk_options(output)
