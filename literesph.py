@@ -19,6 +19,30 @@ def clean_out(output):
 			x=True
 	return ret
 
+def check_sck(ouput):
+	out=output.split('\n')
+	ret=""
+	both=""
+	httponly=""
+	secure=""
+	for line in out:
+		if "Set-Cookie".lower() in line.lower():
+			if "secure" not in line.lower() and "httponly" not in line.lower():
+				both+=line+"\033[0m\n"
+			elif "secure" not in line.lower():
+				secure+=line+"\033[0m\n"
+			elif "httponly" not in line.lower():
+				httponly+=line+"\033[0m\n"
+		else:
+			continue
+	if both!="":
+		ret+=" \033[37;1mThe following field doesn't set both \033[33;1mHTTPOnly\033[37;1m and \033[33;1mSecure\033[37;1m flags:\n\t\033[33;1m<*>\033[0m" + both
+	if httponly!="":
+		ret+=" \033[37;1mThe following field doesn't set \033[33;1mHTTPOnly\033[37;1m flag:\n\t\033[33;1m<*>\033[0m" + httponly
+	if secure!="":
+		ret+=" \033[37;1mThe following field doesn't set \033[33;1mSecure\033[37;1m flag:\n\t\033[33;1m<*>\033[0m" + secure
+	print(ret)
+	return
 
 def check_h(output):
 	print(" \033[37;1mSecurity fields:\033[32;1m")
@@ -84,7 +108,7 @@ if len(sys.argv) != 2:
 	
 
 
-bashCommand = "curl --connect-timeout 1 -s -I -i " + sys.argv[1]
+bashCommand = "curl --connect-timeout 3 -s -I -i " + sys.argv[1]
 process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 output,error = process.communicate()
 
@@ -98,10 +122,12 @@ else:
 	print(output)
 	print("\033[34;1m########################################################\033[0m\n")
 	check_h(output)
+	if "Set-Cookie".lower() in output.lower():
+		check_sck(output)
 
 
 
-bashCommand = "curl  --connect-timeout 1 -s -I -i -X OPTIONS " + sys.argv[1]
+bashCommand = "curl  --connect-timeout 3 -s -I -i -X OPTIONS " + sys.argv[1]
 process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 output,error = process.communicate()
 
