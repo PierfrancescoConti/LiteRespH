@@ -108,7 +108,7 @@ if len(sys.argv) != 2:
 	
 
 
-bashCommand = "curl --connect-timeout 3 -s -I -i " + sys.argv[1]
+bashCommand = "curl -k --connect-timeout 3 -s -I -i " + sys.argv[1]
 process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 output,error = process.communicate()
 
@@ -127,7 +127,7 @@ else:
 
 
 
-bashCommand = "curl  --connect-timeout 3 -s -I -i -X OPTIONS " + sys.argv[1]
+bashCommand = "curl -k  --connect-timeout 3 -s -I -i -X OPTIONS " + sys.argv[1]
 process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE)
 output,error = process.communicate()
 
